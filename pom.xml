@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>b1934976-68c5-4197-92eb-57b83deda8f1</groupId>
 	<artifactId>product-api</artifactId>
@@ -9,8 +11,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<app.runtime>4.9.0</app.runtime>
+		<app.runtime>4.8.5</app.runtime>
 		<mule.maven.plugin.version>4.3.0</mule.maven.plugin.version>
+		<munit.version>3.4.0</munit.version>
 	</properties>
 	<profiles>
 		<profile>
@@ -66,6 +69,20 @@
 							</cloudHubDeployment>
 						</configuration>
 					</plugin>
+					<plugin>
+						<groupId>com.mulesoft.munit.tools</groupId>
+						<artifactId>munit-maven-plugin</artifactId>
+						<version>${munit.version}</version>
+						<executions>
+							<execution>
+								<id>test</id>
+								<phase>test</phase>
+								<goals>
+									<goal>test</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -99,6 +116,29 @@
 					</cloudHubDeployment>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.mulesoft.munit.tools</groupId>
+				<artifactId>munit-maven-plugin</artifactId>
+				<version>${munit.version}</version>
+				<executions>
+					<execution>
+						<id>test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+							<goal>coverage-report</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<coverage>
+						<runCoverage>true</runCoverage>
+						<formats>
+							<format>html</format>
+						</formats>
+					</coverage>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -127,8 +167,38 @@
 			<version>1.11.5</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-runner</artifactId>
+			<version>3.4.0</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-tools</artifactId>
+			<version>3.4.0</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.weave</groupId>
+			<artifactId>assertions</artifactId>
+			<version>1.2.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<repositories>
+		<repository>
+			<id>MuleSoftDependencies</id>
+			<url>https://devops.gac.gulfaero.com/BTES_Services_and_Platforms/_packaging/MuleSoftDependencies/maven/v1</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 		<repository>
 			<id>anypoint-exchange-v3</id>
 			<name>Anypoint Exchange</name>
