@@ -9,8 +9,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <app.runtime>4.7.2</app.runtime>
-        <mule.maven.plugin.version>4.2.0</mule.maven.plugin.version>
+        <app.runtime>4.8.5</app.runtime>
+        <mule.maven.plugin.version>4.3.0</mule.maven.plugin.version>
+        <munit.version>3.4.0</munit.version>
     </properties>
     <profiles>
         <profile>
@@ -60,11 +61,25 @@
                                 <properties>
                                     <env>test</env>
                                     <api.id>20240309</api.id>
-                                    <anypoint.platform.client_id>1ccf1b5ce8154cf9a1faf022ffb6f6bf</anypoint.platform.client_id>
-                                    <anypoint.platform.client_secret>E87b444CFd794810816e741e36396A49</anypoint.platform.client_secret>
+                                    <anypoint.platform.client_id>${anypoint.platform.client_id}</anypoint.platform.client_id>
+                                    <anypoint.platform.client_secret>${anypoint.platform.client_secret}</anypoint.platform.client_secret>
                                 </properties>
                             </cloudHubDeployment>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.mulesoft.munit.tools</groupId>
+                        <artifactId>munit-maven-plugin</artifactId>
+                        <version>${munit.version}</version>
+                        <executions>
+                            <execution>
+                                <id>test</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
@@ -99,6 +114,29 @@
                     </cloudHubDeployment>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.mulesoft.munit.tools</groupId>
+                <artifactId>munit-maven-plugin</artifactId>
+                <version>${munit.version}</version>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                            <goal>coverage-report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <coverage>
+                        <runCoverage>true</runCoverage>
+                        <formats>
+                            <format>html</format>
+                        </formats>
+                    </coverage>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -127,8 +165,38 @@
             <version>1.11.5</version>
             <classifier>mule-plugin</classifier>
         </dependency>
+        <dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-runner</artifactId>
+            <version>3.4.0</version>
+            <classifier>mule-plugin</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-tools</artifactId>
+            <version>3.4.0</version>
+            <classifier>mule-plugin</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.weave</groupId>
+            <artifactId>assertions</artifactId>
+            <version>1.2.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <repositories>
+        <repository>
+            <id>MuleSoftDependencies</id>
+            <url>https://devops.gac.gulfaero.com/BTES_Services_and_Platforms/_packaging/MuleSoftDependencies/maven/v1</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <id>anypoint-exchange-v3</id>
             <name>Anypoint Exchange</name>
